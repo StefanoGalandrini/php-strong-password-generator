@@ -51,8 +51,10 @@ function generate_random_password($characters, $pw_length, $rep_on)
 {
 	// Controllo iniziale sulla lunghezza della password e sui caratteri ripetuti
 	if ($pw_length > count($characters) && !$rep_on) {
-		$message = "La lunghezza della password non può essere maggiore del numero di caratteri unici disponibili.";
-		return $message;
+		return [
+			"message"  => "La lunghezza della password non può essere maggiore del numero di caratteri unici disponibili.",
+			"password" => null,
+		];
 	}
 
 	$password   = "";
@@ -66,13 +68,17 @@ function generate_random_password($characters, $pw_length, $rep_on)
 		}
 	}
 
-	return $password;
+	return [
+		"message"  => "La password scelta è " . $password,
+		"password" => $password,
+	];
 }
 
 // Controlla la lunghezza della password e chiama la funzione per generarla
+$result = generate_random_password($characters, $pw_length, $rep_on);
 if ($pw_length > 0 && $message === "") {
-	$password = generate_random_password($characters, $pw_length, $rep_on);
-	$message  = "La password scelta è " . $password;
+	$message  = $result["message"];
+	$password = $result["password"];
 } else {
 	$message = "Per favore, specifica una lunghezza per la password!";
 }
