@@ -14,17 +14,19 @@ if (isset($_GET["pw-length"])) {
 	$pw_length = intval($_GET["pw-length"]);
 }
 
-// Lettura dei campi di input
-$rep_on  = isset($_GET["rep_on"]) ? $_GET["rep_on"] : "";
-$rep_off = isset($_GET["rep_off"]) ? $_GET["rep_off"] : "";
-$letters = isset($_GET["letters"]) ? $_GET["letters"] : "";
-$numbers = isset($_GET["numbers"]) ? $_GET["numbers"] : "";
-$symbols = isset($_GET["symbols"]) ? $_GET["symbols"] : "";
+// Lettura dei radio buttons
+$repeat = isset($_GET["repeat"]) ? $_GET["repeat"] : 0;
+$rep_on = intval($repeat) === 1;
+
+// Lettura delle checkboxes
+$letters = isset($_GET["letters"]) && $_GET["letters"] === "on";
+$numbers = isset($_GET["numbers"]) && $_GET["numbers"] === "on";
+$symbols = isset($_GET["symbols"]) && $_GET["symbols"] === "on";
 
 // Messaggio di errore in assenza di input validi
 $message = "";
 
-if ($pw_length === 0 && $rep_on === "" && $rep_off === "" && $letters === "" && $numbers === "" && $symbols === "") {
+if ($pw_length === 0 && !$letters && !$numbers && !$symbols) {
 	$message = "Nessun parametro valido inserito";
 } else {
 	$message = "";
@@ -117,6 +119,8 @@ if ($pw_length > 0 && $message === "") {
 		</div>
 		<div class="bg-white text-secondary rounded p-3 text-start">
 			<form method="GET">
+
+				<!-- Password length -->
 				<div class="form-group row mb-5">
 					<div class="col-sm-6">
 						<label for="pw-length">Lunghezza password:</label>
@@ -126,30 +130,30 @@ if ($pw_length > 0 && $message === "") {
 							name="pw-length" value="<?= $pw_length ?>" style="width: 50%;">
 					</div>
 				</div>
+
+				<!-- Radio buttons -->
 				<div class="form-group row mb-5">
 					<div class="col-sm-6">
 						<label>Consenti ripetizioni di uno o più caratteri:</label>
 					</div>
 					<div class="col-sm-6">
 						<div class="form-check">
-							<input class="form-check-input" type="radio" name="rep_on"
-								id="repeat" <?php if ($rep_on === "on")
+							<input class="form-check-input" type="radio" name="repeat"
+								value="1" id="repeat" <?php if ($rep_on)
 									echo "checked"; ?>>
-							<label class="form-check-label" for="repeat">
-								Sì
-							</label>
+							<label class="form-check-label" for="repeat">Sì</label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="radio" name="rep_off"
-								id="norepeat" <?php if ($rep_off === "on")
+							<input class="form-check-input" type="radio" name="repeat"
+								value="0" id="norepeat" <?php if (!$rep_on)
 									echo "checked"; ?>>
-							<label class="form-check-label" for="norepeat">
-								No
-							</label>
+							<label class="form-check-label" for="norepeat">No</label>
 						</div>
+
+						<!-- Checkboxes -->
 						<div class="form-check mt-3">
 							<input class="form-check-input" type="checkbox" id="letters"
-								name="letters" <?php if ($letters === "on")
+								name="letters" <?php if ($letters)
 									echo "checked"; ?>>
 							<label class="form-check-label" for="letters">
 								Lettere
@@ -157,7 +161,7 @@ if ($pw_length > 0 && $message === "") {
 						</div>
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" id="numbers"
-								name="numbers" <?php if ($numbers === "on")
+								name="numbers" <?php if ($numbers)
 									echo "checked"; ?>>
 							<label class="form-check-label" for="numbers">
 								Numeri
@@ -165,7 +169,7 @@ if ($pw_length > 0 && $message === "") {
 						</div>
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" id="symbols"
-								name="symbols" <?php if ($symbols === "on")
+								name="symbols" <?php if ($symbols)
 									echo "checked"; ?>>
 							<label class="form-check-label" for="symbols">
 								Simboli
