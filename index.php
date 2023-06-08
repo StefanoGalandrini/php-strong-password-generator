@@ -16,6 +16,42 @@ insieme).
 Dare all’utente anche la possibilità di permettere o meno la ripetizione di
 caratteri uguali. -->
 
+<?php
+// Array di lettere minuscole
+$letters = range('a', 'z');
+
+// Array di numeri da 0 a 9
+$numbers = range(0, 9);
+
+// Array di simboli comuni
+$symbols = array('!', '@', '#', '$', '%', '&');
+
+// Variabile lunghezza input
+$pw_length = null;
+if (isset($_GET['pw-length'])) {
+	$pw_length = intval($_GET['pw-length']);
+}
+
+// Lettura dei campi di input
+$rep_on  = isset($_GET['rep-on']) ? $_GET['rep-on'] : '';
+$rep_off = isset($_GET['rep-off']) ? $_GET['rep-off'] : '';
+$letters = isset($_GET['letters']) ? $_GET['letters'] : '';
+$numbers = isset($_GET['numbers']) ? $_GET['numbers'] : '';
+$symbols = isset($_GET['symbols']) ? $_GET['symbols'] : '';
+
+// Messaggio di errore in assenza di input validi
+$message = '';
+
+if ($pw_length === 0 && $rep_on === '' && $rep_off === '' && $letters === '' && $numbers === '' && $symbols === '') {
+	$message = 'Nessun parametro valido inserito';
+} else {
+	$message = "-";
+}
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,54 +77,63 @@ caratteri uguali. -->
 		<h1 class="text-secondary">Strong Password Generator</h1>
 		<h2 class="text-light mb-5">Genera una password sicura</h2>
 		<div class="alert alert-primary">
-			<h5 class="alert-heading">Nessun paramentro valido inserito</h5>
+			<h5 class="alert-heading">
+				<?= $message ?>
+			</h5>
 		</div>
-		<div class="bg-white text-secondary rounded p-3 text-start"
-			style="line-height: 2.2;">
-			<form>
-				<div class="form-group row">
+		<div class="bg-white text-secondary rounded p-3 text-start">
+			<form method="GET">
+				<div class="form-group row mb-5">
 					<div class="col-sm-6">
-						<label for="inputNumber">Lunghezza password:</label>
+						<label for="pw-length">Lunghezza password:</label>
 					</div>
 					<div class="col-sm-6">
-						<input type="number" class="form-control" id="inputNumber"
-							style="width: 50%;">
+						<input type="number" class="form-control" id="pw-length"
+							name="pw-length" value="<?= $pw_length ?>" style="width: 50%;">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-5">
 					<div class="col-sm-6">
 						<label>Consenti ripetizioni di uno o più caratteri:</label>
 					</div>
 					<div class="col-sm-6">
 						<div class="form-check">
-							<input class="form-check-input" type="radio"
-								name="flexRadioDefault" id="flexRadioDefault1">
-							<label class="form-check-label" for="flexRadioDefault1">
-								Default radio
+							<input class="form-check-input" type="radio" name="rep_on"
+								id="rep-on" <?php if ($rep_on === 'on')
+									echo 'checked'; ?>>
+							<label class="form-check-label" for="rep-on">
+								Sì
 							</label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="radio"
-								name="flexRadioDefault" id="flexRadioDefault2" checked>
-							<label class="form-check-label" for="flexRadioDefault2">
-								Default checked radio
+							<input class="form-check-input" type="radio" name="rep_off"
+								id="rep-off" <?php if ($rep_off === 'on')
+									echo 'checked'; ?>>
+							<label class="form-check-label" for="rep-off">
+								No
 							</label>
 						</div>
 						<div class="form-check mt-3">
-							<input class="form-check-input" type="checkbox" id="check1">
-							<label class="form-check-label" for="check1">
+							<input class="form-check-input" type="checkbox" id="letters"
+								name="letters" <?php if ($letters === 'on')
+									echo 'checked'; ?>>
+							<label class="form-check-label" for="letters">
 								Lettere
 							</label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="checkbox" id="check2">
-							<label class="form-check-label" for="check2">
+							<input class="form-check-input" type="checkbox" id="numbers"
+								name="numbers" <?php if ($numbers === 'on')
+									echo 'checked'; ?>>
+							<label class="form-check-label" for="numbers">
 								Numeri
 							</label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="checkbox" id="check3">
-							<label class="form-check-label" for="check3">
+							<input class="form-check-input" type="checkbox" id="symbols"
+								name="symbols" <?php if ($symbols === 'on')
+									echo 'checked'; ?>>
+							<label class="form-check-label" for="symbols">
 								Simboli
 							</label>
 						</div>
