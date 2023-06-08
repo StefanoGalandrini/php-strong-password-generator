@@ -15,8 +15,8 @@ if (isset($_GET["pw-length"])) {
 }
 
 // Lettura dei radio buttons
-$repeat = isset($_GET["repeat"]) ? $_GET["repeat"] : 0;
-$rep_on = intval($repeat) === 1;
+$repeat = isset($_GET["repeat"]) ? $_GET["repeat"] : null;
+$rep_on = $repeat === "1" || $repeat === null;
 
 // Lettura delle checkboxes
 $letters = isset($_GET["letters"]) && $_GET["letters"] === "on";
