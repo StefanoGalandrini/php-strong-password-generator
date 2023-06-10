@@ -23,14 +23,6 @@ $letters = isset($_GET["letters"]) && $_GET["letters"] === "on";
 $numbers = isset($_GET["numbers"]) && $_GET["numbers"] === "on";
 $symbols = isset($_GET["symbols"]) && $_GET["symbols"] === "on";
 
-// Messaggio di errore in assenza di input validi
-$message = "";
-
-if ($pw_length === 0 && !$letters && !$numbers && !$symbols) {
-	$message = "Nessun parametro valido inserito";
-} else {
-	$message = "";
-}
 
 // Array dato dall"unione delle stringhe consentite
 $characters = [];
@@ -76,11 +68,23 @@ function generate_random_password($characters, $pw_length, $rep_on)
 	];
 }
 
-// Controlla la lunghezza della password e chiama la funzione per generarla
-$result = generate_random_password($characters, $pw_length, $rep_on);
-if ($pw_length > 0 && $message === "") {
-	$message  = $result["message"];
-	$password = $result["password"];
+// Messaggio di errore in assenza di input validi
+$message = "";
+
+if ($pw_length > 0 && (!$letters && !$numbers && !$symbols)) {
+	$message = "Nessun parametro valido inserito";
 } else {
-	$message = "Per favore, specifica una lunghezza per la password!";
+	$message = "";
+
+	// Controlla la lunghezza della password e chiama la funzione per generarla
+	if ($pw_length > 0 && $message === "" && ($letters || $numbers || $symbols)) {
+		$result = generate_random_password($characters, $pw_length, $rep_on);
+		var_dump($pw_length > 0 && ($letters || $numbers || $symbols));
+		var_dump($numbers);
+		var_dump($symbols);
+		$message  = $result["message"];
+		$password = $result["password"];
+	} else {
+		return $message = "Per favore, specifica una lunghezza per la password!";
+	}
 }
